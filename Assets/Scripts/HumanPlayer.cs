@@ -1,48 +1,46 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class HumanPlayer : Player
 {
-    private GameManager gameManager;
-    [SerializeField] GameObject playerHandGameObject;
-    [SerializeField] Text handValueText;
+    private GameManager _gameManager;
+    [SerializeField] private GameObject _playerHandUI;
 
     // Start is called before the first frame update
     void Start()
     {
-        gameManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>();
+        HandValue = 0;
+        _gameManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameManager>();
         HitButton();
         HitButton();
     }
 
     public void HitButton()
     {
-        if (!gameManager.IsPlayerTurn) return;
+        if (!_gameManager.IsPlayerTurn) return;
             
-        GetRandomCard(gameManager.Deck, playerHandGameObject.transform);
-        UpdateHandValueUI(handvalue);
+        GetRandomCard(_gameManager.Deck, _playerHandUI.transform);
+        UpdateHandValueUI();
         CheckState();
-    }
-
-    private void UpdateHandValueUI(int handValue)
-    {
-        handValueText.text = "Hand Value " + "\n" + handvalue; 
     }
 
     private void CheckState()
     {
-        if(handvalue > 21)
+        if(HandValue > 21)
         {
             print("Busted!");
-            gameManager.EndPlayerTurn();
+            _gameManager.EndPlayerTurn();
         }
-
-        if(hand.Count >= 5)
+        else if(Hand.Count >= 5)
         {
             print("all cards drawn");
-            gameManager.EndPlayerTurn();
+            _gameManager.EndPlayerTurn();
         }
+    }
+
+    public void StayButton()
+    {
+        _gameManager.EndPlayerTurn();
     }
 }
